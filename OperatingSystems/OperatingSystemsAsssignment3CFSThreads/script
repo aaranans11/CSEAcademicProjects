@@ -1,0 +1,2 @@
+gcc cfs_threads.c -o assignment3
+xterm & 
