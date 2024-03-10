@@ -1,0 +1,14 @@
+# Real-Time Embedded Systems Lab 5 – Basic I/O using Interrupts
+
+## Abstract:
+
+
+Basic input/output requires an understanding of the memory map, relevant definitions and macros, and bitwise manipulations such as setting, clearing, and toggling bits.  This experiment utilized and explored the MSP432P401R Launchpad board and the Keil uVision5 development environment with the purpose of extending the previous lab experiment and implementing a simple program to interact with the LEDs on the board using switch interrupt service handlers instead of polling.
+
+For the initial setup for the program created in this experiment, the watchdog timer was firstly disabled.  Then, the pins required for interfacing with the board’s switches and LEDs were configured.  P1SEL0 and P1SEL1 were set to 0 to set up the GPIO configuration for pins 0 (Red LED), 1 (Switch 1), and 4 (Switch 2) on port 1, and pins 0, 1, and 2 (RGB LED) on port 2.  P1DIR was then set to 0 for pins 1 and 4 on port 1 to configure the switch’s pins as inputs and P1REN was set to 1 for pins 1 and 4 on port 1 to enable the pull-up resistors for these pins.  To configure the LED pins as outputs, P1DIR was set to 1 for pin 0 on port 1, and P2DIR was set to 1 for pins 0, 1, and 2 on port 2.  The LED states were initialized to be in the off state by setting P1OUT to 0 for pin 0 on port 1, and pins 0, 1, and 2 on port 2.  The switch interrupts and NVIC were then configured, and global interrupts were enabled.  Lastly, the main function was put in an infinite loop to continuously wait for a switch interrupt.
+
+The remaining logic to handle the system’s response to either switch being pressed was implemented inside the PORT1_IRQHandler function.  Firstly, static variables for storing the current LED selected by Switch 1 and the current state of the LED selected were initialized.
+Conditional blocks were then used to determine which button was pressed using debouncing.  If port 1’s interrupt flag was set to high due to a signal from pin 1 (switch 1 was pressed), the interrupt flag was cleared, an XOR operation was done with the value of the current LED variable and 1 to alternate between the LEDs, and the LED pins’ output were then reset to 0 to turn them off.  If port 1’s interrupt flag was set to high due to a signal from pin 4 (switch 2 was pressed), the interrupt flag was cleared, the current state of the LED was incremented based on the current LED selected, and then the output was set based on the new incremented state.  
+
+Therefore, through the completion of this lab, the basics of setting up the Launchpad board’s GPIO pins as input or output depending on the needs of the program using bit manipulation were practised.  The logic needed for debouncing and bit toggling based on the program requirements were also learned.  Lastly, the configuration and implementation of interrupt service routines was learned.
+
